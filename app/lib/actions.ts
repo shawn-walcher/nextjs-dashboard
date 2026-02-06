@@ -29,7 +29,12 @@ export async function createInvoice(formData: FormData) {
   await sql`
     INSERT INTO invoices (customer_id, amount, status, date)
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-  `;
+  `.catch((error) => {
+    console.error("Error inserting invoice:", error);
+    return {
+      message: "Failed to create invoice",
+    };
+  });
 
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
@@ -49,17 +54,31 @@ export async function updateInvoice(id: string, formData: FormData) {
     UPDATE invoices
     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
     WHERE id = ${id}
-  `;
+  `.catch((error) => {
+    console.error("Error updating invoice:", error);
+    return {
+      message: "Failed to update invoice",
+    };
+  });
 
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
 
 export async function deleteInvoice(id: string) {
+  throw new Error(
+    "Delete functionality is currently disabled for safety reasons.",
+  );
   await sql`
     DELETE FROM invoices
     WHERE id = ${id}
-  `;
+  `.catch((error) => {
+    console.error("Error deleting invoice:", error);
+    return {
+      message: "Failed to delete invoice",
+    };
+  });
+
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
