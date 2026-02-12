@@ -1,4 +1,9 @@
-import { formatCurrency, formatDateToLocal } from "@/app/lib/utils";
+import {
+  formatCurrency,
+  formatDateToLocal,
+  generateYAxis,
+  generatePagination,
+} from "@/app/lib/utils";
 
 describe("Utils", () => {
   describe("formatCurrency", () => {
@@ -121,6 +126,222 @@ describe("Utils", () => {
       expect(deResult).toBeTruthy();
       expect(deResult).not.toBe("Invalid Date");
       expect(deResult).toMatch(/2024/);
+    });
+  });
+
+  describe("generateYAxis", () => {
+    it("should generate y-axis labels for small revenue amounts", () => {
+      // Arrange
+      const revenue = [
+        { month: "Jan", revenue: 500 },
+        { month: "Feb", revenue: 750 },
+      ];
+
+      // Act
+      const result = generateYAxis(revenue);
+
+      // Assert
+      expect(result.topLabel).toBe(1000);
+      expect(result.yAxisLabels).toEqual(["$1K", "$0K"]);
+    });
+
+    it("should generate y-axis labels for large revenue amounts", () => {
+      // Arrange
+      const revenue = [
+        { month: "Jan", revenue: 15000 },
+        { month: "Feb", revenue: 12500 },
+      ];
+
+      // Act
+      const result = generateYAxis(revenue);
+
+      // Assert
+      expect(result.topLabel).toBe(15000);
+      expect(result.yAxisLabels).toContain("$15K");
+      expect(result.yAxisLabels).toContain("$0K");
+    });
+
+    it("should handle single data point", () => {
+      // Arrange
+      const revenue = [{ month: "Jan", revenue: 5000 }];
+
+      // Act
+      const result = generateYAxis(revenue);
+
+      // Assert
+      expect(result.topLabel).toBe(5000);
+      expect(result.yAxisLabels).toContain("$5K");
+      expect(result.yAxisLabels).toContain("$0K");
+    });
+
+    it("should handle zero revenue", () => {
+      // Arrange
+      const revenue = [{ month: "Jan", revenue: 0 }];
+
+      // Act
+      const result = generateYAxis(revenue);
+
+      // Assert
+      expect(result.topLabel).toBe(0);
+      expect(result.yAxisLabels).toEqual(["$0K"]);
+    });
+
+    it("should properly round up to nearest thousand", () => {
+      // Arrange
+      const revenue = [{ month: "Jan", revenue: 3100 }];
+
+      // Act
+      const result = generateYAxis(revenue);
+
+      // Assert
+      expect(result.topLabel).toBe(4000);
+      expect(result.yAxisLabels).toContain("$4K");
+    });
+  });
+
+  describe("generatePagination", () => {
+    it("should return all pages when total pages is 7 or less", () => {
+      // Arrange
+      const currentPage = 2;
+      const totalPages = 5;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, 3, 4, 5]);
+    });
+
+    it("should return all pages when total pages is exactly 7", () => {
+      // Arrange
+      const currentPage = 4;
+      const totalPages = 7;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    });
+
+    it("should show first 3, ellipsis, and last 2 pages when on first 3 pages", () => {
+      // Arrange
+      const currentPage = 2;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, 3, "...", 9, 10]);
+    });
+
+    it("should show first page, first 3 pages, ellipsis, and last 2 pages when on page 1", () => {
+      // Arrange
+      const currentPage = 1;
+      const totalPages = 15;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, 3, "...", 14, 15]);
+    });
+
+    it("should show first 2, ellipsis, and last 3 pages when on last 3 pages", () => {
+      // Arrange
+      const currentPage = 9;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, "...", 8, 9, 10]);
+    });
+
+    it("should show first 2, ellipsis, and last 3 pages when on last page", () => {
+      // Arrange
+      const currentPage = 10;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2, "...", 8, 9, 10]);
+    });
+
+    it("should show middle pagination when on middle page", () => {
+      // Arrange
+      const currentPage = 5;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, "...", 4, 5, 6, "...", 10]);
+    });
+
+    it("should handle single page", () => {
+      // Arrange
+      const currentPage = 1;
+      const totalPages = 1;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1]);
+    });
+
+    it("should handle two pages", () => {
+      // Arrange
+      const currentPage = 1;
+      const totalPages = 2;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, 2]);
+    });
+
+    it("should show correct pagination for page 4 of 10", () => {
+      // Arrange
+      const currentPage = 4;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert - Page 4 is in the middle, so shows page ± 1 neighbors
+      expect(result).toEqual([1, "...", 3, 4, 5, "...", 10]);
+    });
+
+    it("should show correct pagination for page 6 of 10", () => {
+      // Arrange
+      const currentPage = 6;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert
+      expect(result).toEqual([1, "...", 5, 6, 7, "...", 10]);
+    });
+
+    it("should show correct pagination for page 8 of 10", () => {
+      // Arrange
+      const currentPage = 8;
+      const totalPages = 10;
+
+      // Act
+      const result = generatePagination(currentPage, totalPages);
+
+      // Assert - Page 8 is >= 10 - 2 = 8, so shows last 3 pages
+      expect(result).toEqual([1, 2, "...", 8, 9, 10]);
     });
   });
 });

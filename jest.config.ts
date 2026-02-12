@@ -25,16 +25,30 @@ const config: Config = {
     "**/*.test.tsx",
   ],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/app/$1",
+    "^@/(.*)$": "<rootDir>/$1",
   },
+  transformIgnorePatterns: ["node_modules/(?!(next-auth)/)"],
   collectCoverageFrom: [
     "app/**/*.{js,jsx,ts,tsx}",
+    // Exclude type definition files
     "!app/**/*.d.ts",
+    // Exclude Next.js page and layout components (typically integration tested)
     "!app/**/layout.tsx",
     "!app/**/page.tsx",
+    "!app/**/error.tsx",
+    "!app/**/loading.tsx",
+    "!app/**/not-found.tsx",
+    // Exclude CSS and build artifacts
     "!app/**/*.module.css",
     "!app/.next/**",
+    // Exclude test files themselves
     "!app/**/__tests__/**",
+    // Exclude configuration and setup files
+    "!app/**/fonts.ts",
+    "!app/**/route.ts",
+    "!app/**/auth.ts",
+    "!app/**/auth.config.ts",
+    "!app/**/proxy.ts",
   ],
   coverageThreshold: {
     global: {
