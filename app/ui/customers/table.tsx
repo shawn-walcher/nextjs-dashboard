@@ -1,7 +1,5 @@
-import Image from 'next/image';
-import {
-  FormattedCustomersTable,
-} from '@/app/lib/definitions';
+import Image from "next/image";
+import { FormattedCustomersTable } from "@/app/lib/definitions";
 
 export default async function CustomersTable({
   customers,
@@ -33,9 +31,7 @@ export default async function CustomersTable({
                           <p>{customer.name}</p>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-500">
-                        {customer.email}
-                      </p>
+                      <p className="text-sm text-gray-500">{customer.email}</p>
                     </div>
                   </div>
                   <div className="flex w-full items-center justify-between border-b py-5">

@@ -1,6 +1,6 @@
 // Loading animation
 const shimmer =
-  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+  "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent";
 
 export function CardSkeleton() {
   return (
@@ -323,7 +323,9 @@ export function CustomersTableSkeleton() {
 
 export function SearchSkeleton() {
   return (
-    <div className={`${shimmer} relative flex flex-1 flex-shrink-0 overflow-hidden rounded-md`}>
+    <div
+      className={`${shimmer} relative flex flex-1 flex-shrink-0 overflow-hidden rounded-md`}
+    >
       <div className="h-10 w-full rounded-md bg-gray-100"></div>
     </div>
   );
