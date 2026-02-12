@@ -77,6 +77,46 @@ pnpm start
 
 Test login credentials are available in [Chapter 14 of the Next.js Learn course](https://nextjs.org/learn/dashboard-app/adding-authentication#try-it-out).
 
+## Testing & Quality
+
+This project includes a comprehensive CI/CD pipeline with automated testing and quality checks:
+
+### Running Tests Locally
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Generate coverage report
+pnpm test:coverage
+```
+
+### Quality Gates
+
+- **Test Coverage**: 80% minimum threshold (branches, functions, lines, statements)
+- **Linting**: ESLint enforced on all commits
+- **Type Safety**: TypeScript strict mode checked on all PRs
+- **Git Hooks**: Husky pre-commit hooks run tests and linting automatically
+
+### Full CI/CD Setup
+
+For detailed information about the CI/CD infrastructure, including:
+
+- Jest configuration
+- Husky pre-commit hooks
+- GitHub Actions workflow
+- Test best practices
+- Coverage requirements
+
+See the [CI/CD Setup Guide](./docs/CI_CD_SETUP.md).
+
+### Troubleshooting Pre-commit Hooks
+
+If you encounter issues with the pre-commit hooks (such as SIGKILL errors), refer to the [Pre-commit Hook Troubleshooting Guide](./docs/SIGKILL_FIX.md) for solutions.
+
 ## Deployed Version
 
 You can view the latest deployed version of this application by checking the link under the "About" section on the [GitHub repository page](https://github.com).
