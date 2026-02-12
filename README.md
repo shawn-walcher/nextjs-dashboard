@@ -37,12 +37,12 @@ pnpm install
 ```
 
 3. Set up environment variables:
-
    - Copy the `.env.example` file to `.env.local`:
+
      ```bash
      cp .env.example .env.local
      ```
-   
+
    - Update `.env.local` with your actual configuration values:
      - `AUTH_SECRET` - Generate a random secret key for authentication
      - `AUTH_URL` - Your application's URL (default: `http://localhost:3000/api/auth` for development)
