@@ -1,10 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import SideNav from "@/app/ui/dashboard/sidenav";
-import { signOut } from "@/auth";
 
 // Mock dependencies
-jest.mock("@/auth", () => ({
-  signOut: jest.fn(),
+jest.mock("@/app/lib/actions", () => ({
+  logout: jest.fn(),
 }));
 
 jest.mock("@/app/ui/dashboard/nav-links", () => {

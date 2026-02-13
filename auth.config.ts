@@ -17,5 +17,24 @@ export const authConfig = {
       return true;
     },
   },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 60, // 30 minutes session timeout
+    updateAge: 5 * 60, // Update session every 5 minutes
+  },
+  jwt: {
+    maxAge: 30 * 60, // 30 minutes
+  },
+  cookies: {
+    sessionToken: {
+      name: "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 30 * 60,
+      },
+    },
+  },
   providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;
