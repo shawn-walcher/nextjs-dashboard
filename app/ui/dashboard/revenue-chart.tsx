@@ -27,7 +27,7 @@ export default function RevenueChart({ data }: RevenueChartProps) {
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Recent Revenue
       </h2>
-      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
+      <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4 min-h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
