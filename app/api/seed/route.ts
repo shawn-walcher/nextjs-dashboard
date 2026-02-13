@@ -5,7 +5,7 @@ import {
   customers,
   revenue,
   users,
-} from "../lib/mocks/placeholder-data";
+} from "../../lib/mocks/placeholder-data";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -106,17 +106,72 @@ async function seedRevenue() {
   return insertedRevenue;
 }
 
+async function seedMonthlyPaidInvoices() {
+  // Generate paid invoices for the past 12 months
+  const customerIds = [
+    "d6e15727-9fe1-4961-8c5b-ea44a9bd81aa",
+    "3958dc9e-712f-4377-85e9-fec4b6a6442a",
+    "3958dc9e-712f-4377-85e9-fec4b6a6442b",
+    "76d65c26-f784-44a2-ac19-586678f7d33f",
+    "CC27C14A-0ACF-4F4A-A6C9-D45682C144B9",
+  ];
+
+  const invoices = [];
+  const now = new Date();
+
+  // Generate 3-5 invoices per month for the last 12 months
+  for (let monthOffset = 11; monthOffset >= 0; monthOffset--) {
+    const monthDate = new Date(
+      now.getFullYear(),
+      now.getMonth() - monthOffset,
+      1,
+    );
+    const monthStr = monthDate.toISOString().split("T")[0]; // YYYY-MM-DD format
+
+    // Generate 3-5 invoices for this month
+    const invoicesInMonth = Math.floor(Math.random() * 3) + 3;
+
+    for (let i = 0; i < invoicesInMonth; i++) {
+      const randomCustomer =
+        customerIds[Math.floor(Math.random() * customerIds.length)];
+      const amount = Math.floor(Math.random() * 40000) + 10000; // 100-400 in cents = $1-$4
+
+      invoices.push({
+        customer_id: randomCustomer,
+        amount: amount,
+        status: "paid",
+        date: monthStr,
+      });
+    }
+  }
+
+  const insertedInvoices = await Promise.all(
+    invoices.map(
+      (invoice) => sql`
+        INSERT INTO invoices (customer_id, amount, status, date)
+        VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
+        ON CONFLICT DO NOTHING;
+      `,
+    ),
+  );
+
+  return insertedInvoices;
+}
+
 export async function GET() {
   try {
-    const result = await sql.begin((sql) => [
-      seedUsers(),
-      seedCustomers(),
-      seedInvoices(),
-      seedRevenue(),
-    ]);
+    await sql.begin(async (sql) => {
+      await seedUsers();
+      await seedCustomers();
+      await seedInvoices();
+      await seedRevenue();
+      await seedMonthlyPaidInvoices();
+    });
 
     return Response.json({ message: "Database seeded successfully" });
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Seed error:", message);
+    return Response.json({ error: message }, { status: 500 });
   }
 }

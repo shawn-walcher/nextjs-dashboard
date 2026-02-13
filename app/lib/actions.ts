@@ -141,3 +141,13 @@ export async function authenticate(
 export async function logout() {
   await signOut({ redirectTo: "/" });
 }
+
+export async function getRevenueData() {
+  try {
+    const { fetchRevenue } = await import("./data");
+    return await fetchRevenue();
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    return [];
+  }
+}

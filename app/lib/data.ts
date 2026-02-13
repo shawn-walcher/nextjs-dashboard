@@ -13,8 +13,27 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 export async function fetchRevenue() {
   try {
-    const data = await sql<Revenue[]>`SELECT * FROM revenue`;
-    return data;
+    // Get the last 12 months of data
+    const data = await sql<Revenue[]>`
+      SELECT
+        TO_CHAR(DATE_TRUNC('month', invoices.date), 'Mon') as month,
+        COALESCE(SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END), 0) as revenue
+      FROM invoices
+      WHERE invoices.date >= CURRENT_DATE - INTERVAL '12 months'
+      GROUP BY DATE_TRUNC('month', invoices.date)
+      ORDER BY DATE_TRUNC('month', invoices.date) ASC
+    `;
+
+    // Ensure revenue is a number type
+    const formattedData = data.map((item) => ({
+      month: item.month,
+      revenue:
+        typeof item.revenue === "string"
+          ? parseInt(item.revenue as any, 10)
+          : (item.revenue as unknown as number),
+    }));
+
+    return formattedData;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch revenue data.");
