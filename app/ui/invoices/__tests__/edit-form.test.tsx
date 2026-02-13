@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import EditInvoiceForm from "../edit-form";
-import { CustomerField, InvoiceForm } from "@/app/lib/definitions";
+import { CustomerField, InvoiceForm } from "@/app/lib/types/definitions";
 
 // Mock Next.js Link component
 jest.mock("next/link", () => {

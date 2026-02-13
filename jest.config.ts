@@ -32,6 +32,9 @@ const config: Config = {
     "app/**/*.{js,jsx,ts,tsx}",
     // Exclude type definition files
     "!app/**/*.d.ts",
+    "!app/**/types/**",
+    // Exclude mock data files
+    "!app/**/mocks/**",
     // Exclude Next.js page and layout components (typically integration tested)
     "!app/**/layout.tsx",
     "!app/**/page.tsx",

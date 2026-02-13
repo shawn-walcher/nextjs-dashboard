@@ -2,7 +2,7 @@ import React, { useActionState } from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateInvoiceForm from "../create-form";
-import { CustomerField } from "@/app/lib/definitions";
+import { CustomerField } from "@/app/lib/types/definitions";
 
 // Mock Next.js Link component
 jest.mock("next/link", () => {

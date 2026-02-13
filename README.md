@@ -101,22 +101,6 @@ pnpm test:coverage
 - **Type Safety**: TypeScript strict mode checked on all PRs
 - **Git Hooks**: Husky pre-commit hooks run tests and linting automatically
 
-### Full CI/CD Setup
-
-For detailed information about the CI/CD infrastructure, including:
-
-- Jest configuration
-- Husky pre-commit hooks
-- GitHub Actions workflow
-- Test best practices
-- Coverage requirements
-
-See the [CI/CD Setup Guide](./docs/CI_CD_SETUP.md).
-
-### Troubleshooting Pre-commit Hooks
-
-If you encounter issues with the pre-commit hooks (such as SIGKILL errors), refer to the [Pre-commit Hook Troubleshooting Guide](./docs/SIGKILL_FIX.md) for solutions.
-
 ## Deployed Version
 
 You can view the latest deployed version of this application by checking the link under the "About" section on the [GitHub repository page](https://github.com).

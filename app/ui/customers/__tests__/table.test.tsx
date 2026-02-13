@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import CustomersTable from "../table";
-import { FormattedCustomersTable } from "@/app/lib/definitions";
+import { FormattedCustomersTable } from "@/app/lib/types/definitions";
 
 // Mock Next.js Image component
 jest.mock("next/image", () => ({
