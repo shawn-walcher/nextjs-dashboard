@@ -103,7 +103,7 @@ pnpm test:coverage
 
 ## Deployed Version
 
-You can view the latest deployed version of this application by checking the link under the "About" section on the [GitHub repository page](https://github.com).
+You can view the latest deployed version of this application by checking the link under the "About" section on the [GitHub repository page](https://github.com/shawn-walcher/nextjs-dashboard).
 
 ## Project Structure
 
